@@ -2,9 +2,15 @@
 <resources>
 
     <string name="app_name">CampusClipper</string>
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
+    <string name="title_section1">Home</string>
+    <string name="title_section2">Favorites</string>
+    <string name="title_section3">Near Me</string>
+    <string name="title_section4">More</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_more">MoreActivity</string>
+    <string name="tab_more_title">More Title</string>
+    <string name="tab_more_content">For more information, please visit our website.</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>

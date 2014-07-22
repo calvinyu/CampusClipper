@@ -129,13 +129,15 @@ public class MainActivity extends ActionBarActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
+			if( position == 3) return new MoreActivity();
+			if( position == 2) return new MapActivity();
 			return PlaceholderFragment.newInstance(position + 1);
 		}
 
 		@Override
 		public int getCount() {
-			// Show 3 total pages.
-			return 3;
+			// Show 4 total pages.
+			return 4;
 		}
 
 		@Override
@@ -148,6 +150,8 @@ public class MainActivity extends ActionBarActivity implements
 				return getString(R.string.title_section2).toUpperCase(l);
 			case 2:
 				return getString(R.string.title_section3).toUpperCase(l);
+			case 3:
+				return getString(R.string.title_section4).toUpperCase(l);
 			}
 			return null;
 		}
@@ -177,17 +181,7 @@ public class MainActivity extends ActionBarActivity implements
 		public PlaceholderFragment() {
 		}
 
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View rootView = inflater.inflate(R.layout.fragment_main, container,
-					false);
-			TextView textView = (TextView) rootView
-					.findViewById(R.id.section_label);
-			textView.setText(Integer.toString(getArguments().getInt(
-					ARG_SECTION_NUMBER)));
-			return rootView;
-		}
+		
 	}
 
 }
