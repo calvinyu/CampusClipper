@@ -2,6 +2,8 @@ package com.campusclipper.android;
 
 import java.util.Locale;
 
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -34,7 +36,6 @@ public class MainActivity extends ActionBarActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
 		// Set up the action bar.
 		final ActionBar actionBar = getSupportActionBar();
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
@@ -126,7 +127,7 @@ public class MainActivity extends ActionBarActivity implements
 			// below).
 			if( position == 3) return new MoreActivity();
 			//if( position == 2) return new MapActivity();
-			if( position == 1) return new MyLocationActivity();
+			if( position == 2) return new MyLocationActivity();
 			return PlaceholderFragment.newInstance(position + 1);
 		}
 
@@ -179,5 +180,6 @@ public class MainActivity extends ActionBarActivity implements
 
 		
 	}
-
+	
+	
 }

@@ -13,6 +13,6 @@
     <string name="title_activity_map">MapActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_my_location">MyLocationActivity</string>
-    <string name="my_location">MyLocationActivity</string>
+    <string name="my_location">My Location</string>
 
 </resources>

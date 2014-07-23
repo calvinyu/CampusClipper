@@ -22,6 +22,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,11 +64,19 @@ public class MyLocationActivity extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
+    	super.onCreateView(inflater, container, savedInstanceState);
     	Toast.makeText(getActivity(), "onCreateView is called", Toast.LENGTH_LONG).show();
     	View rootView = inflater.inflate(R.layout.activity_my_location,
 				container, false);
         mMessageView = (TextView) rootView.findViewById(R.id.message_text);
-    	if(mMessageView == null) Toast.makeText(getActivity(), "But message view is still null", Toast.LENGTH_LONG).show();
+        ((Button) (rootView.findViewById(R.id.get_my_location_button))).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				showMyLocation(getView());			
+			}
+		});
+        if(mMessageView == null) Toast.makeText(getActivity(), "But message view is still null", Toast.LENGTH_LONG).show();
     	
     	return rootView;
     }
@@ -160,9 +169,12 @@ public class MyLocationActivity extends Fragment
         // Do nothing
     }
 
+    
+    //OnClickListener of the button
     @Override
     public boolean onMyLocationButtonClick() {
         Toast.makeText(getActivity(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
+        showMyLocation(getView());
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         return false;
