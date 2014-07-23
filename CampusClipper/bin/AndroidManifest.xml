@@ -52,6 +52,10 @@
             android:name=".MapActivity"
             android:label="@string/title_activity_map" >
         </activity>
+        <activity
+            android:name=".MyLocationActivity"
+            android:label="@string/title_activity_my_location" >
+        </activity>
     </application>
 
 </manifest>

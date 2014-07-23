@@ -12,5 +12,7 @@
     <string name="tab_more_content">For more information, please visit our website.</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_my_location">MyLocationActivity</string>
+    <string name="my_location">MyLocationActivity</string>
 
 </resources>
