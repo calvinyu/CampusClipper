@@ -24,7 +24,31 @@
         android:id="@+id/message_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
+  <TextView
+    android:id="@+id/top_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:lines="2"
+    android:text="@string/drag_melbourne"/>
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+    <CheckBox
+      android:id="@+id/flat"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/flat"
+      android:textSize="14sp" />
+    <TextView
+      android:layout_marginLeft="8dp"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="@string/rotation" />
+    <SeekBar
+      android:id="@+id/rotationSeekBar"
+      android:layout_width="fill_parent"
+      android:layout_height="wrap_content"/>
+  </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent" >
@@ -38,7 +62,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|right"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
             android:background="#D000"
             android:orientation="vertical"
             android:padding="5dp" >
@@ -49,7 +74,26 @@
                 android:layout_height="wrap_content"
                 android:padding="8dp"
                 android:text="@string/my_location" />
+
+            <RadioGroup
+                android:id="@+id/custom_info_window_options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" >
+
+                <RadioButton
+                    android:id="@+id/default_info_window"
+                    android:checked="true"
+                    android:text="@string/default_info_window" />
+                <RadioButton
+                    android:id="@+id/custom_info_contents"
+                    android:text="@string/custom_info_contents" />
+
+                <RadioButton
+                    android:id="@+id/custom_info_window"
+                    android:text="@string/custom_info_window" />
+            </RadioGroup>
         </LinearLayout>
+
     </RelativeLayout>
 
 </LinearLayout>

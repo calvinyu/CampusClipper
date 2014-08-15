@@ -41,9 +41,10 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
+import android.widget.ToggleButton;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesClient.ConnectionCallbacks;
@@ -86,14 +87,16 @@ public class MyLocationActivity extends Fragment
 
     private LocationClient mLocationClient;
     private TextView mMessageView;
-
+    private View mRootView;
+    private Bundle mBundle;
+    private ViewGroup mContainer;
     
     private static final LatLng BRISBANE = new LatLng(-27.47093, 153.0235);
     private static final LatLng MELBOURNE = new LatLng(-37.81319, 144.96298);
     private static final LatLng SYDNEY = new LatLng(-33.87365, 151.20689);
     private static final LatLng ADELAIDE = new LatLng(-34.92873, 138.59995);
     private static final LatLng PERTH = new LatLng(-31.952854, 115.857342);
-    
+
     /** Demonstrates customizing the info window and/or its contents. */
     class CustomInfoWindowAdapter implements InfoWindowAdapter {
         private final RadioGroup mOptions;
@@ -104,13 +107,17 @@ public class MyLocationActivity extends Fragment
         private final View mContents;
 
         CustomInfoWindowAdapter() {
-            mWindow = getActivity().getLayoutInflater().inflate(R.layout.custom_info_window, null);//
-            mContents = getActivity().getLayoutInflater().inflate(R.layout.custom_info_contents, null);//
-            mOptions = (RadioGroup) getActivity().findViewById(R.id.custom_info_window_options);
+            mWindow = getLayoutInflater(mBundle).inflate(R.layout.custom_info_window, mContainer);//
+            mContents = getLayoutInflater(mBundle).inflate(R.layout.custom_info_contents, mContainer);//
+            mOptions = (RadioGroup) mRootView.findViewById(R.id.custom_info_window_options);
         }
 
         @Override
         public View getInfoWindow(Marker marker) {
+        	if(mOptions == null){
+        		Toast.makeText(getActivity(), "mOptions is null!!", Toast.LENGTH_LONG).show();
+        		return mWindow;
+        	}
             if (mOptions.getCheckedRadioButtonId() != R.id.custom_info_window) {
                 // This means that getInfoContents will be called.
                 return null;
@@ -201,28 +208,41 @@ public class MyLocationActivity extends Fragment
     		Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
     	Toast.makeText(getActivity(), "onCreateView is called", Toast.LENGTH_LONG).show();
-    	final View rootView = inflater.inflate(R.layout.activity_my_location,
+    	
+    	mBundle = savedInstanceState;
+    	mContainer = container;
+    	
+    	mRootView = inflater.inflate(R.layout.activity_my_location,
 				container, false);
-        mTopText = (TextView) rootView.findViewById(R.id.top_text);
+        mTopText = (TextView) mRootView.findViewById(R.id.top_text);
 
-        mTopText = (TextView) rootView.findViewById(R.id.top_text);
+        mTopText = (TextView) mRootView.findViewById(R.id.top_text);
 
-        mRotationBar = (SeekBar) rootView.findViewById(R.id.rotationSeekBar);
+        mRotationBar = (SeekBar) mRootView.findViewById(R.id.rotationSeekBar);
         mRotationBar.setMax(360);
 
-        mFlatBox = (CheckBox) rootView.findViewById(R.id.flat);
+        mFlatBox = (CheckBox) mRootView.findViewById(R.id.flat);
 
-        mMessageView = (TextView) rootView.findViewById(R.id.message_text);
-        ((Button) (rootView.findViewById(R.id.get_my_location_button))).setOnClickListener(new View.OnClickListener() {
+        mMessageView = (TextView) mRootView.findViewById(R.id.message_text);
+        ((Button) (mRootView.findViewById(R.id.get_my_location_button))).setOnClickListener(new View.OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
 				showMyLocation(getView());			
 			}
 		});
+        
+        ((CheckBox) (mRootView.findViewById(R.id.flat))).setOnClickListener(new View.OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				onToggleFlat(getView());	
+			}
+		});
+        
         if(mMessageView == null) Toast.makeText(getActivity(), "But message view is still null", Toast.LENGTH_LONG).show();
-        if (rootView.getViewTreeObserver().isAlive()) {
-            rootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+        if (mRootView.getViewTreeObserver().isAlive()) {
+            mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
                 @SuppressWarnings("deprecation") // We use the new method when supported
                 @SuppressLint("NewApi") // We check which build version we are using.
                 @Override
@@ -235,15 +255,16 @@ public class MyLocationActivity extends Fragment
                             .include(MELBOURNE)
                             .build();
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                      rootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                      mRootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
                     } else {
-                      rootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                      mRootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     }
                     mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
                 }
             });
         }
-    	return rootView;
+        setUpMapIfNeeded();
+    	return mRootView;
     }
     
     @Override
@@ -272,6 +293,7 @@ public class MyLocationActivity extends Fragment
             if (mMap != null) {
                 mMap.setMyLocationEnabled(true);
                 mMap.setOnMyLocationButtonClickListener(this);
+                setUpMap();
             }
         }
     }
@@ -353,10 +375,49 @@ public class MyLocationActivity extends Fragment
 			getFragmentManager().beginTransaction().remove(f).commit();
 	}
 
-	@Override
-	public void onInfoWindowClick(Marker arg0) {
-		Toast.makeText(getActivity(), "Click Info Window", Toast.LENGTH_SHORT).show();		
-	}
+    private void setUpMap() {
+        // Hide the zoom controls as the button panel will cover it.
+        mMap.getUiSettings().setZoomControlsEnabled(false);
+
+        // Add lots of markers to the map.
+        addMarkersToMap();
+
+        // Setting an info window adapter allows us to change the both the contents and look of the
+        // info window.
+        mMap.setInfoWindowAdapter(new CustomInfoWindowAdapter());
+
+        // Set listeners for marker events.  See the bottom of this class for their behavior.
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
+        mMap.setOnMarkerDragListener(this);
+
+        // Pan to see all markers in view.
+        // Cannot zoom to bounds until the map has a size.
+       // final View mRootView = getSupportFragmentManager().findFragmentById(R.id.map).getView();
+        if (mRootView.getViewTreeObserver().isAlive()) {
+            mRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+                @SuppressWarnings("deprecation") // We use the new method when supported
+                @SuppressLint("NewApi") // We check which build version we are using.
+                @Override
+                public void onGlobalLayout() {
+                    LatLngBounds bounds = new LatLngBounds.Builder()
+                            .include(PERTH)
+                            .include(SYDNEY)
+                            .include(ADELAIDE)
+                            .include(BRISBANE)
+                            .include(MELBOURNE)
+                            .build();
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                      mRootView.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    } else {
+                      mRootView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 50));
+                }
+            });
+        }
+    }
+
     private void addMarkersToMap() {
         // Uses a colored icon.
         mBrisbane = mMap.addMarker(new MarkerOptions()
@@ -408,70 +469,67 @@ public class MyLocationActivity extends Fragment
         }
     }
 
+    private boolean checkReady() {
+        if (mMap == null) {
+            Toast.makeText(getActivity(), R.string.map_not_ready, Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    /** Called when the Clear button is clicked. */
+    public void onClearMap(View view) {
+        if (!checkReady()) {
+            return;
+        }
+        mMap.clear();
+    }
+
+    /** Called when the Reset button is clicked. */
+    public void onResetMap(View view) {
+        if (!checkReady()) {
+            return;
+        }
+        // Clear the map because we don't want duplicates of the markers.
+        mMap.clear();
+        addMarkersToMap();
+    }
+
+    /** Called when the Reset button is clicked. */
+    public void onToggleFlat(View view) {
+        if (!checkReady()) {
+            return;
+        }
+        boolean flat = mFlatBox.isChecked();
+        for (Marker marker : mMarkerRainbow) {
+            marker.setFlat(flat);
+        }
+    }
+
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        if (!checkReady()) {
+            return;
+        }
+        float rotation = seekBar.getProgress();
+        for (Marker marker : mMarkerRainbow) {
+            marker.setRotation(rotation);
+        }
+    }
+
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+        // Do nothing.
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+        // Do nothing.
+    }
+
     //
     // Marker related listeners.
     //
-	  private boolean checkReady() {
-	        if (mMap == null) {
-	            Toast.makeText(getActivity(), R.string.map_not_ready, Toast.LENGTH_SHORT).show();
-	            return false;
-	        }
-	        return true;
-	    }
-
-	    /** Called when the Clear button is clicked. */
-	    public void onClearMap(View view) {
-	        if (!checkReady()) {
-	            return;
-	        }
-	        mMap.clear();
-	    }
-
-	    /** Called when the Reset button is clicked. */
-	    public void onResetMap(View view) {
-	        if (!checkReady()) {
-	            return;
-	        }
-	        // Clear the map because we don't want duplicates of the markers.
-	        mMap.clear();
-	        addMarkersToMap();
-	    }
-
-	    /** Called when the Reset button is clicked. */
-	    public void onToggleFlat(View view) {
-	        if (!checkReady()) {
-	            return;
-	        }
-	        boolean flat = mFlatBox.isChecked();
-	        for (Marker marker : mMarkerRainbow) {
-	            marker.setFlat(flat);
-	        }
-	    }
-
-	    @Override
-	    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-	        if (!checkReady()) {
-	            return;
-	        }
-	        float rotation = seekBar.getProgress();
-	        for (Marker marker : mMarkerRainbow) {
-	            marker.setRotation(rotation);
-	        }
-	    }
-
-	    @Override
-	    public void onStartTrackingTouch(SeekBar seekBar) {
-	        // Do nothing.
-	    }
-
-	    @Override
-	    public void onStopTrackingTouch(SeekBar seekBar) {
-	        // Do nothing.
-	    }
-
-	    //
-	    // Marker related listeners.
-	    //
 
     @Override
     public boolean onMarkerClick(final Marker marker) {
@@ -507,6 +565,12 @@ public class MyLocationActivity extends Fragment
         // marker is centered and for the marker's info window to open, if it has one).
         return false;
     }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        Toast.makeText(getActivity(), "Click Info Window", Toast.LENGTH_SHORT).show();
+    }
+
     @Override
     public void onMarkerDragStart(Marker marker) {
         mTopText.setText("onMarkerDragStart");
