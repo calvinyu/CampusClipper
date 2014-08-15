@@ -128,6 +128,7 @@ public class MainActivity extends ActionBarActivity implements
 			if( position == 3) return new MoreActivity();
 			//if( position == 2) return new MapActivity();
 			if( position == 2) return new MyLocationActivity();
+			if(position == 0) return new HomeActivity.PlaceholderFragment();
 			return PlaceholderFragment.newInstance(position + 1);
 		}
 

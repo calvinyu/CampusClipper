@@ -136,5 +136,6 @@
     <string name="zoom_gestures">Zoom Gestures</string>
     <string name="zoom_in">+</string>
     <string name="zoom_out">-</string>
+    <string name="title_activity_home">HomeActivity</string>
 
 </resources>
