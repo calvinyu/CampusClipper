@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
+	<string name="label1">one</string>
+    <string name="body1b">an other body one</string>
+    <string name="tag_bis">bis</string>
     <string name="app_name">CampusClipper</string>
     <string name="title_section1">Home</string>
     <string name="title_section2">Favorites</string>
@@ -12,6 +14,7 @@
     <string name="tab_more_content">For more information, please visit our website.</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="hello_world">Hello world!</string>
+    <string name="label_search_button">Search</string>
     <string name="title_activity_my_location">MyLocationActivity</string>
     <string name="alpha">Alpha</string>
     <string name="animate">Animate</string>
@@ -137,5 +140,9 @@
     <string name="zoom_in">+</string>
     <string name="zoom_out">-</string>
     <string name="title_activity_home">HomeActivity</string>
+    <string name="title_activity_view_coupon">ViewCouponActivity</string>
+    <string name="button_uptown">UPTOWN</string>
+    <string name="button_midtown">MIDTOWN</string>
+    <string name="button_downtown">DOWNTOWN</string>
 
 </resources>

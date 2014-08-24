@@ -41,7 +41,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.ToggleButton;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;

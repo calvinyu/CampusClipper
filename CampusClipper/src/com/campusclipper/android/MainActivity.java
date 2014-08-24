@@ -125,11 +125,21 @@ public class MainActivity extends ActionBarActivity implements
 			// getItem is called to instantiate the fragment for the given page.
 			// Return a PlaceholderFragment (defined as a static inner class
 			// below).
-			if( position == 3) return new MoreActivity();
-			//if( position == 2) return new MapActivity();
-			if( position == 2) return new MyLocationActivity();
-			if(position == 0) return new HomeActivity.PlaceholderFragment();
-			return PlaceholderFragment.newInstance(position + 1);
+			
+			switch (position) {
+			case 0:
+				return new HomeActivity();
+			case 1:
+				return new ViewCouponActivity();
+			case 2:
+				 return new MyLocationActivity();
+			case 3:
+				 return new MoreActivity();
+			default:
+				return PlaceholderFragment.newInstance(position + 1);
+				
+			}
+			
 		}
 
 		@Override
