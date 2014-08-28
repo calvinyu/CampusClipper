@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-	<string name="label1">one</string>
+
+    <string name="label1">one</string>
     <string name="body1b">an other body one</string>
     <string name="tag_bis">bis</string>
     <string name="app_name">CampusClipper</string>
@@ -144,5 +145,6 @@
     <string name="button_uptown">UPTOWN</string>
     <string name="button_midtown">MIDTOWN</string>
     <string name="button_downtown">DOWNTOWN</string>
+    <string name="title_activity_root_home_fragment">RootHomeFragment</string>
 
 </resources>

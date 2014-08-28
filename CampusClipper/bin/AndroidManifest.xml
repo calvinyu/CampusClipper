@@ -64,6 +64,10 @@
             android:name=".ViewCouponActivity"
             android:label="@string/title_activity_view_coupon" >
         </activity>
+        <activity
+            android:name=".RootHomeFragment"
+            android:label="@string/title_activity_root_home_fragment" >
+        </activity>
     </application>
 
 </manifest>

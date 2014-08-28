@@ -2,8 +2,6 @@ package com.campusclipper.android;
 
 import java.util.Locale;
 
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -119,6 +117,12 @@ public class MainActivity extends ActionBarActivity implements
 		public SectionsPagerAdapter(FragmentManager fm) {
 			super(fm);
 		}
+		
+		@Override
+		public int getItemPosition(Object object) {
+			// TODO Auto-generated method stub
+			return super.getItemPosition(object);
+		}
 
 		@Override
 		public Fragment getItem(int position) {
@@ -128,7 +132,7 @@ public class MainActivity extends ActionBarActivity implements
 			
 			switch (position) {
 			case 0:
-				return new HomeActivity();
+				return new RootHomeFragment();
 			case 1:
 				return new ViewCouponActivity();
 			case 2:
@@ -189,8 +193,6 @@ public class MainActivity extends ActionBarActivity implements
 		public PlaceholderFragment() {
 		}
 
-		
 	}
-	
-	
+
 }
