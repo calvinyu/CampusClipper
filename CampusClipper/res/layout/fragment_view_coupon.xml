@@ -10,7 +10,7 @@
     <!-- tools:context="com.campusclipper.android.ViewCouponActivity" > -->
 	
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/buttonUpTown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -19,20 +19,20 @@
         android:text="@string/button_uptown" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/buttonMidTown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
-        android:layout_below="@+id/button1"
+        android:layout_alignLeft="@+id/buttonUpTown"
+        android:layout_below="@+id/buttonUpTown"
         android:layout_marginTop="18dp"
         android:text="@string/button_midtown" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/buttonDownTown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/button2"
-        android:layout_below="@+id/button2"
+        android:layout_alignRight="@+id/buttonMidTown"
+        android:layout_below="@+id/buttonMidTown"
         android:layout_marginTop="23dp"
         android:text="@string/button_downtown" />
 </RelativeLayout>

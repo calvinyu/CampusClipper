@@ -9,29 +9,33 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
 
-public class HomeActivity extends Fragment {
-
-	private static final String TAG = "HomeFragment";
+public class ViewCouponActivity extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-
-		View rootView = inflater.inflate(R.layout.fragment_home, container,
-				false);
-
-		Button mButtonAll = (Button) rootView.findViewById(R.id.buttonAllF);
-		mButtonAll.setOnClickListener(new CategoryListener(getFragmentManager()));
-		Button mButtonSchool = (Button) rootView.findViewById(R.id.buttonSchoolF);
-		mButtonSchool.setOnClickListener(new CategoryListener(getFragmentManager()));
-		Button mButtonHealth = (Button) rootView.findViewById(R.id.buttonHealthF);
-		mButtonHealth.setOnClickListener(new CategoryListener(getFragmentManager()));
-		return rootView;
-	}
-
-	private class CategoryListener implements OnClickListener {
+		Toast.makeText(getActivity(), "onCreate of ViewCouponActivity is called!!", Toast.LENGTH_LONG).show();
+		View rootView = inflater.inflate(R.layout.fragment_view_coupon, container, false);
 		
+
+		Button mButtonUpTown = (Button) rootView.findViewById(R.id.buttonUpTown);
+		mButtonUpTown.setOnClickListener(new CategoryListener(getFragmentManager()));
+		
+		Button mButtonMidTown = (Button) rootView.findViewById(R.id.buttonMidTown);
+		mButtonMidTown.setOnClickListener(new CategoryListener(getFragmentManager()));
+		
+		Button mButtonDownTown = (Button) rootView.findViewById(R.id.buttonDownTown);
+		mButtonDownTown.setOnClickListener(new CategoryListener(getFragmentManager()));
+		
+		
+		return rootView;
+	}	
+	
+	
+	private class CategoryListener implements OnClickListener {
+
 		FragmentManager mg;
 		
 		public CategoryListener(FragmentManager mg) {
@@ -50,7 +54,7 @@ public class HomeActivity extends Fragment {
 			 * IMPORTANT: We use the "root frame" defined in "root_fragment.xml"
 			 * as the reference to replace fragment
 			 */
-			trans.replace(R.id.root_frame, new ViewCouponActivity());
+			trans.replace(R.id.root_frame, new CouponDetail());
 
 			/*
 			 * IMPORTANT: The following lines allow us to add the fragment to
@@ -63,4 +67,6 @@ public class HomeActivity extends Fragment {
 
 	}
 
+
+	
 }

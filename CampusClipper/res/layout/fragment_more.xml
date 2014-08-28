@@ -8,7 +8,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.campusclipper.android.MoreActivity$PlaceholderFragment" >
 
-    <TextView
+    <Button
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -18,7 +18,7 @@
         android:text="@string/tab_more_title" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/textView1F"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
@@ -26,4 +26,21 @@
         android:layout_marginTop="22dp"
         android:text="@string/tab_more_content" />
 
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_below="@+id/textView1F"
+        android:layout_marginTop="32dp"
+        android:text="@string/resetButtonTitle" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_marginTop="22dp"
+        android:text="@string/resetText" />
+    
 </RelativeLayout>

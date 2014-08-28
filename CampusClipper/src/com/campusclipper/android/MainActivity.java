@@ -134,7 +134,7 @@ public class MainActivity extends ActionBarActivity implements
 			case 0:
 				return new RootHomeFragment();
 			case 1:
-				return new ViewCouponActivity();
+				return new Favorite();
 			case 2:
 				 return new MyLocationActivity();
 			case 3:
