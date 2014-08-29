@@ -12,6 +12,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity implements
 		ActionBar.TabListener {
@@ -46,7 +47,7 @@ public class MainActivity extends ActionBarActivity implements
 		// Set up the ViewPager with the sections adapter.
 		mViewPager = (ViewPager) findViewById(R.id.pager);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
-
+		mViewPager.setOffscreenPageLimit(10);
 		// When swiping between different sections, select the corresponding
 		// tab. We can also use ActionBar.Tab#select() to do this if we have
 		// a reference to the Tab.
@@ -80,6 +81,7 @@ public class MainActivity extends ActionBarActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Toast.makeText(this, "onOptionItemSelected", Toast.LENGTH_SHORT).show();
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
@@ -132,11 +134,13 @@ public class MainActivity extends ActionBarActivity implements
 			
 			switch (position) {
 			case 0:
+				//return PlaceholderFragment.newInstance(position + 1);
 				return new RootHomeFragment();
 			case 1:
 				return new Favorite();
 			case 2:
-				 return new MyLocationActivity();
+				return new MyLocationActivity();
+				 //return new MyLocationActivity();
 			case 3:
 				 return new MoreActivity();
 			default:

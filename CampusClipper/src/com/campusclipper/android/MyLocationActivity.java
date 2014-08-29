@@ -41,7 +41,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,12 +50,11 @@ import com.google.android.gms.common.GooglePlayServicesClient.OnConnectionFailed
 import com.google.android.gms.location.LocationClient;
 import com.google.android.gms.location.LocationListener;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 import com.google.android.gms.maps.GoogleMap.OnMyLocationButtonClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -77,10 +75,10 @@ public class MyLocationActivity extends Fragment
         OnConnectionFailedListener,
         LocationListener,
         OnMyLocationButtonClickListener,
-        OnMarkerClickListener,
-        OnMarkerDragListener,
-        OnInfoWindowClickListener,
-        OnSeekBarChangeListener
+        OnMarkerClickListener
+       // OnMarkerDragListener,
+        //OnInfoWindowClickListener
+       // OnSeekBarChangeListener
         {
     private GoogleMap mMap;
 
@@ -206,7 +204,7 @@ public class MyLocationActivity extends Fragment
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     		Bundle savedInstanceState) {
     	super.onCreateView(inflater, container, savedInstanceState);
-    	Toast.makeText(getActivity(), "onCreateView is called", Toast.LENGTH_LONG).show();
+    	Toast.makeText(getActivity(), "onCreateView is called", Toast.LENGTH_SHORT).show();
     	
     	mBundle = savedInstanceState;
     	mContainer = container;
@@ -227,7 +225,10 @@ public class MyLocationActivity extends Fragment
 			
 			@Override
 			public void onClick(View v) {
-				showMyLocation(getView());			
+				showMyLocation(getView());
+
+				LatLng current = new LatLng(mLocationClient.getLastLocation().getLatitude(),mLocationClient.getLastLocation().getLongitude());
+		        mMap.addMarker(new MarkerOptions().position(current).title("Marker"));
 			}
 		});
         
@@ -263,19 +264,28 @@ public class MyLocationActivity extends Fragment
             });
         }
         setUpMapIfNeeded();
+        
+//		LatLng current = new LatLng(mLocationClient.getLastLocation().getLatitude(),mLocationClient.getLastLocation().getLongitude());
+//        mMap.addMarker(new MarkerOptions().position(current).title("Marker"));
+//        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(current, 13);
+//        mMap.animateCamera(yourLocation);
+        
     	return mRootView;
     }
     
     @Override
     public void onResume() {
+		Toast.makeText(getActivity(), "ML resume", Toast.LENGTH_SHORT).show();
         super.onResume();
         setUpMapIfNeeded();
         setUpLocationClientIfNeeded();
         mLocationClient.connect();
+
     }
 
     @Override
     public void onPause() {
+    	Toast.makeText(getActivity(), "ML onPause", Toast.LENGTH_SHORT).show();
         super.onPause();
         if (mLocationClient != null) {
             mLocationClient.disconnect();
@@ -283,6 +293,7 @@ public class MyLocationActivity extends Fragment
     }
 
     private void setUpMapIfNeeded() {
+    	Toast.makeText(getActivity(), "SetupMapIfNeeded", Toast.LENGTH_SHORT).show();
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
             // Try to obtain the map from the SupportMapFragment.
@@ -334,9 +345,16 @@ public class MyLocationActivity extends Fragment
      */
     @Override
     public void onConnected(Bundle connectionHint) {
+    	Toast.makeText(getActivity(), "ML onConnected", Toast.LENGTH_SHORT).show();
         mLocationClient.requestLocationUpdates(
                 REQUEST,
                 this);  // LocationListener
+        
+
+		LatLng current = new LatLng(mLocationClient.getLastLocation().getLatitude(),mLocationClient.getLastLocation().getLongitude());
+        mMap.addMarker(new MarkerOptions().position(current).title("Marker"));
+        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(current, 13);
+        mMap.animateCamera(yourLocation);
     }
 
     /**
@@ -345,6 +363,7 @@ public class MyLocationActivity extends Fragment
     @Override
     public void onDisconnected() {
         // Do nothing
+    	Toast.makeText(getActivity(), "ML onDisconnected", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -361,6 +380,9 @@ public class MyLocationActivity extends Fragment
     public boolean onMyLocationButtonClick() {
         Toast.makeText(getActivity(), "MyLocation button clicked", Toast.LENGTH_SHORT).show();
         showMyLocation(getView());
+
+		//LatLng current = new LatLng(mLocationClient.getLastLocation().getLatitude(),mLocationClient.getLastLocation().getLongitude());
+        //mMap.addMarker(new MarkerOptions().position(current).title("Marker"));
         // Return false so that we don't consume the event and the default behavior still occurs
         // (the camera animates to the user's current position).
         return false;
@@ -387,8 +409,7 @@ public class MyLocationActivity extends Fragment
 
         // Set listeners for marker events.  See the bottom of this class for their behavior.
         mMap.setOnMarkerClickListener(this);
-        mMap.setOnInfoWindowClickListener(this);
-        mMap.setOnMarkerDragListener(this);
+        //mMap.setOnInfoWindowClickListener(this);
 
         // Pan to see all markers in view.
         // Cannot zoom to bounds until the map has a size.
@@ -505,26 +526,6 @@ public class MyLocationActivity extends Fragment
         }
     }
 
-    @Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        if (!checkReady()) {
-            return;
-        }
-        float rotation = seekBar.getProgress();
-        for (Marker marker : mMarkerRainbow) {
-            marker.setRotation(rotation);
-        }
-    }
-
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-        // Do nothing.
-    }
-
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-        // Do nothing.
-    }
 
     //
     // Marker related listeners.
@@ -565,23 +566,5 @@ public class MyLocationActivity extends Fragment
         return false;
     }
 
-    @Override
-    public void onInfoWindowClick(Marker marker) {
-        Toast.makeText(getActivity(), "Click Info Window", Toast.LENGTH_SHORT).show();
-    }
 
-    @Override
-    public void onMarkerDragStart(Marker marker) {
-        mTopText.setText("onMarkerDragStart");
-    }
-
-    @Override
-    public void onMarkerDragEnd(Marker marker) {
-        mTopText.setText("onMarkerDragEnd");
-    }
-
-    @Override
-    public void onMarkerDrag(Marker marker) {
-        mTopText.setText("onMarkerDrag.  Current Position: " + marker.getPosition());
-    }
 }
